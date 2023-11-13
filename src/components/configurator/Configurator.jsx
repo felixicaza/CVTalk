@@ -32,7 +32,7 @@ const toggleStyle =
   "w-9 h-5 peer-focus:outline peer-focus:outline-2 peer-focus:outline-blue-500 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all border-gray-600 peer-checked:bg-blue-600";
 
 const dataInitialState = {};
-dataInitialState[CHANNEL] = "chrisvdev"; // Validar Usuario si
+dataInitialState[CHANNEL] = ""; // Validar Usuario si
 dataInitialState[DEFAULT_AVATAR] = ""; // URL si
 dataInitialState[`${DEFAULT_AVATAR}${VALID}`] = true; // URL si
 dataInitialState[STYLE] = ""; // Validar URL si
@@ -176,23 +176,31 @@ export default function Configurator() {
               });
           }
         }}
-        className="flex flex-col space-y-4 p-4 border border-gray-700 rounded-lg"
+        className="flex flex-col gap-4 p-4 border border-gray-700 rounded-lg"
       >
         <div className={itemStyle}>
-          <label className={labelStyle}>Channel</label>
+          <label className={labelStyle} htmlFor="channel">
+            Twitch channel
+          </label>
           <input
             className={input}
             value={data[CHANNEL]}
             type="text"
+            id="channel"
             name={CHANNEL}
+            placeholder="chrisvdev"
+            autoFocus={true}
             onInput={makeInputHandler(CHANNEL)}
           />
         </div>
 
         <div className={itemStyle}>
-          <label className={labelStyle}>Custom CSS Style</label>
+          <label className={labelStyle} htmlFor="skin">
+            Chat skin
+          </label>
           <select
             className={`${input} my-1`}
+            id="skin"
             onInput={(e) => {
               const { value } = e.currentTarget;
               const style = {};
@@ -204,33 +212,41 @@ export default function Configurator() {
               else setCcss(() => false);
             }}
           >
-            <option value="">Custom...</option>
+            <option value="">Default</option>
             {skins.map(({ title, url }, i) => (
               <option key={`skin_${i}`} value={url}>
                 {title}
               </option>
             ))}
           </select>
+          <label className={labelStyle} htmlFor="custom-skin">
+            Or paste a custom skin URL
+          </label>
           <input
             className={input}
             value={data[STYLE]}
             type="text"
+            id="custom-skin"
             name={STYLE}
             onInput={makeInputHandler(STYLE)}
             style={ccss ? {} : { display: "none" }}
-            placeholder="Paste here the skin URL..."
+            placeholder="/url/to/skin/style.css"
           />
         </div>
         {data[`${STYLE}${VALID}`] || (
           <p className="text-red-600">Is not a valid URL</p>
         )}
         <div className={itemStyle}>
-          <label className={labelStyle}>Default Avatar</label>
+          <label className={labelStyle} htmlFor="avatar">
+            URL to default avatar
+          </label>
           <input
             className={input}
             value={data[DEFAULT_AVATAR]}
             type="text"
+            id="avatar"
             name={DEFAULT_AVATAR}
+            placeholder="/url/to/image/avatar.png"
             onInput={makeInputHandler(DEFAULT_AVATAR)}
           />
         </div>
@@ -242,20 +258,26 @@ export default function Configurator() {
           <input
             checked={data[TTS]}
             type="checkbox"
+            id="tts"
             name={TTS}
             onInput={makeInputHandler(TTS)}
             class="sr-only peer"
           />
           <div class={toggleStyle}></div>
-          <span class="ml-3 text-sm font-medium text-gray-300">TTS</span>
+          <label class="ml-3 text-sm font-medium text-gray-300" htmlFor="tts">
+            TTS
+          </label>
         </label>
 
         <div className={itemStyle}>
           {/* Si esta desactivado se podrían anular los 2 siguientes inputs */}
-          <label className={labelStyle}>TTS Accent</label>
+          <label className={labelStyle} htmlFor="tts-accent">
+            TTS Accent
+          </label>
           <select
             className={input}
             value={data[TTS_ACCENT]}
+            id="tts-accent"
             name={TTS_ACCENT}
             onInput={makeInputHandler(TTS_ACCENT)}
           >
@@ -267,10 +289,13 @@ export default function Configurator() {
           </select>
         </div>
         <div className={itemStyle}>
-          <label className={labelStyle}>Accent variant</label>
+          <label className={labelStyle} htmlFor="tts-accent-variant">
+            Accent variant
+          </label>
           <select
             className={input}
             value={data[TTS_INDEX]}
+            id="tts-accent-variant"
             name={TTS_INDEX}
             onInput={makeInputHandler(TTS_INDEX)}
           >
@@ -292,25 +317,35 @@ export default function Configurator() {
         <label class="relative inline-flex items-center mb-5 cursor-pointer">
           <input
             type="checkbox"
+            id="render"
             name={RENDER}
             onInput={makeInputHandler(RENDER)}
             class="sr-only peer"
           />
           <div class={toggleStyle}></div>
-          <span class="ml-3 text-sm font-medium text-gray-300">Render</span>
+          <label
+            class="ml-3 text-sm font-medium text-gray-300"
+            htmlFor="render"
+          >
+            Render
+          </label>
         </label>
 
         <div className={itemStyle}>
-          <label className={labelStyle}>Bots</label>
+          <label className={labelStyle} htmlFor="bots">
+            Exclude bots
+          </label>
           <input
             className={input}
             value={data[BOTS]}
             type="text"
+            id="bots"
             name={BOTS}
             onInput={makeInputHandler(BOTS)}
+            placeholder="botname1, botname2"
           />
           <p className="font-mono text-xs m-1">
-            Usernames separated by "," like "bot1,bot2,etc"
+            Usernames separated by "," (comma) like "botname1,botname2".
           </p>
         </div>
 
@@ -318,14 +353,18 @@ export default function Configurator() {
           <input
             type="checkbox"
             checked={data[PATO_BOT]}
+            id="patobot"
             name={PATO_BOT}
             onInput={makeInputHandler(PATO_BOT)}
             class="sr-only peer"
           />
           <div class={toggleStyle}></div>
-          <span class="ml-3 text-sm font-medium text-gray-300">
+          <label
+            class="ml-3 text-sm font-medium text-gray-300"
+            htmlFor="patobot"
+          >
             PatoBot compatibility
-          </span>
+          </label>
         </label>
 
         <p className="italic text-xs text-zinc-400 hover:text-zinc-100 transition-all cursor-pointer">
@@ -340,14 +379,18 @@ export default function Configurator() {
           <input
             type="checkbox"
             checked={data[HTMLI]}
+            id="html-injection"
             name={HTMLI}
             onInput={makeInputHandler(HTMLI)}
             class="sr-only peer"
           />
           <div class={toggleStyle}></div>
-          <span class="ml-3 text-sm font-medium text-gray-300">
+          <label
+            class="ml-3 text-sm font-medium text-gray-300"
+            htmlFor="html-injection"
+          >
             HTML Injection
-          </span>
+          </label>
         </label>
 
         <p className="italic text-xs text-zinc-400">
